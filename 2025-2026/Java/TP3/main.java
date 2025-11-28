@@ -1,0 +1,143 @@
+
+import java.time.LocalDate;
+
+
+/**
+ *
+ * @author William
+ */
+public class main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+	//Test Livre
+	Livre livre1 = new Livre("Harry Potter a l'ecole des sorciers", "1111111111111", 350);
+	Livre livre2 = new Livre("Harry Potter et la Chambre des Secrets", "1111111111112", 350);
+	Livre livre3 = new Livre("Harry Potter et la Prison l'Azkaban", "1111111111113", 350);
+	Livre livre4 = new Livre("Harry Potter et la Coupe de feu", "1111111111114", 350);
+	Livre livre5 = new Livre("Harry Potter et l'Ordre du Phenix", "1111111111115", 350);
+	Livre livre6 = new Livre("Harry Potter et le Prince de Sang-Mele", "1111111111116", 350);
+	Livre livre7 = new Livre("Harry Potter et les Reliques de la Mort", "1111111111117", 350);
+	Livre livre17 = new Livre("Harry Potter et les Reliques de la Mort 6", 99, 2, "1111111111148", 350);
+	System.out.println(livre1);
+	System.out.println(livre5);
+	
+	//Test Manuel
+	Manuel manuel1 = new Manuel("Apprendre le mandarin", "1111111111121", 350);
+	Manuel manuel2 = new Manuel("Apprendre la biologie", "1111111111122", 350);
+	Manuel manuel3 = new Manuel("Apprendre le russe", "1111111111123", 350);
+	Manuel manuel4 = new Manuel("Apprendre l'anglais", "1111111111124", 350);
+	Manuel manuel5 = new Manuel("Apprendre Java", "1111111111125", 350);
+	Manuel manuel6 = new Manuel("Apprendre Python", "1111111111126", 350);
+	Manuel manuel7 = new Manuel("Apprendre SQL", "1111111111127", 350);
+	System.out.println(manuel1);
+	System.out.println(manuel5);
+	
+	//Test Magazine
+	Magazine magazine1 = new Magazine("Louis Vuitton - La mode made in France", "11111111");
+	Magazine magazine2 = new Magazine("Shein, le nouvel eldorado", "11111122");
+	Magazine magazine3 = new Magazine("Uniqlo, le style japonais", "11111123");
+	Magazine magazine4 = new Magazine("Bershka, le style des faux riches", "11111124");
+	Magazine magazine5 = new Magazine("Channel : Alta Sartoria, magnifique", "11111125");
+	Magazine magazine6 = new Magazine("Kiabi : la mode un peu moins accesible", "11111126");
+	Magazine magazine7 = new Magazine("Issey Miyake : l'outsider", "11111127");
+	System.out.println(magazine1);
+	System.out.println(magazine5);
+	
+	//Test LigneDepot
+	LigneDepot ligneDepot1 = new LigneDepot(magazine7.getISSN(), 2);
+	LigneDepot ligneDepot2 = new LigneDepot(magazine6.getISSN(), 3);
+	LigneDepot ligneDepot3 = new LigneDepot(magazine5.getISSN(), 5);
+	LigneDepot ligneDepot4 = new LigneDepot(magazine4.getISSN(), 1);
+	LigneDepot ligneDepot5 = new LigneDepot(magazine3.getISSN(), 7);
+	LigneDepot ligneDepot6 = new LigneDepot(manuel7.getISBN(), 1);
+	System.out.println(ligneDepot1);
+	System.out.println(ligneDepot6);
+	
+	//Test BonDepot
+	BonDepot bonDepot1 = new BonDepot("+33 6 01 01 01 01");
+	BonDepot bonDepot2 = new BonDepot("+33 7 77 77 77 77");
+	System.out.println(bonDepot1);
+	System.out.println(bonDepot2);
+	bonDepot1.addLigne(ligneDepot2);
+	System.out.println(bonDepot1);
+	bonDepot1.addLigne(ligneDepot3);
+	System.out.println(bonDepot1);
+	bonDepot1.addLigne(ligneDepot6);
+	System.out.println(bonDepot1);
+	bonDepot1.addLigne(ligneDepot6);
+	
+	//Test Etablissement
+	Etablissement etablissement1 = new Etablissement("BHV", 4, 10);
+	Etablissement etablissement2 = new Etablissement("Grande Epicerie de Paris", 4, 5);
+//	System.out.println(etablissement1);
+//	System.out.println(etablissement2);
+	etablissement1.addBonDepot(bonDepot1);
+//	System.out.println(etablissement1);
+	bonDepot2.addLigne(ligneDepot4);
+	bonDepot2.addLigne(ligneDepot5);
+	etablissement1.addBonDepot(bonDepot2);
+	etablissement1.addArticle(livre17);
+	etablissement1.addArticle(livre4);
+	System.out.println(etablissement1);
+	
+	//Test getNumero()
+	System.out.println("Numero (Livre ou Manuel): " + livre1.getNumero());
+	System.out.println("Numero (Magazine): " + magazine1.getNumero());
+	
+	//Test placerApres()
+	System.out.println("\nplacerApres() (Magazine sur Livre) : " + magazine1.placerApres(livre1));
+	
+	//Test ajouter et retirer
+	System.out.println("\nQuantite avant ajout : " + livre1.getNbExemplaires());
+	livre1.ajouter(5);
+	System.out.println("Quantite apres ajout (+5) : " + livre1.getNbExemplaires());
+	livre1.retirer(3);
+	System.out.println("Quantite apres retrait (-3) : " + livre1.getNbExemplaires());
+	livre1.retirer(8);
+	
+	//Test calculerPrix
+	System.out.println("\nDate de publication du Magazine : 01/01/2020, Periodicite : " + magazine1.getPeriodicite().toString() + " et prix : " + magazine1.getPrixInitialVente());
+	magazine1.setDateDePublication(LocalDate.parse("2020-01-01"));
+	System.out.println("Calcul du prix : " + magazine1.calculerPrix());
+	
+	//Test ajout Livre depuis Etablissement
+	System.out.println("\n" + etablissement1);
+	System.out.println("\nNombre de places : " + etablissement1.getNbArticles() + "/" + etablissement1.getLimiteArticles());
+	etablissement1.addLivre("Harry Potter et l'Enfant Maudit", 25, 1, "1231591475684", 359);
+	
+	
+	
+//	Manuel m1 = new Manuel("Le bitcoin pour les nuls", 1111111112, 350, Manuel.Matiere.INFO, Manuel.Niveau.CE1);
+//	System.out.println(m1);
+//	
+//	BonDepot bd1 = new BonDepot("+6 66 66 66 66");
+//	BonDepot bd2 = new BonDepot("+7 77 77 77 77");
+//	
+//	System.out.println(bd1);
+//	System.out.println(bd2);
+//	
+//	LigneDepot ld1 = new LigneDepot(l1.getISBN());
+//	LigneDepot ld2 = new LigneDepot(m1.getISBN(), 5);
+//	LigneDepot ld3 = new LigneDepot(m1.getISBN(), 2);
+//	LigneDepot ld4 = new LigneDepot(m1.getISBN(), 3);
+//	LigneDepot ld5 = new LigneDepot(m1.getISBN(), 10);
+//	
+//	bd1.addLigne(ld1);
+//	System.out.println(bd1);
+//	bd1.addLigne(ld2);
+//	System.out.println(bd1);
+//	System.out.println(bd2);
+//	
+//	Etablissement e1 = new Etablissement("E1", 1, 10);
+//	e1.addArticle(m1);
+//	System.out.println(e1);
+//	
+//	bd1.addLigne(ld5);
+//	System.out.println(bd1);
+	
+    }
+    
+}
