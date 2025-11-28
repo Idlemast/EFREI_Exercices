@@ -2,10 +2,7 @@ package tp2;
 
 import java.util.ArrayList;
 import java.util.Collections;
-/**
- *
- * @author William
- */
+
 public class Exercice2 {
     public static void main(String[] args) {
 	// Déclaration de l'ArrayList et ajout des nombres de pages

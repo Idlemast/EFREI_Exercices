@@ -1,20 +1,13 @@
 package tp2;
-
-/**
- *
- * @author William
- */
+/* authors William WAN et Hsiao-Wen-Paul LO*/
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
 	System.out.println("------ [EXERCICE 1] ------");
 	Exercice1 e1 = new Exercice1();
 	System.out.println("Nombre total de pages : " + e1.sum());
 	System.out.println("Nombre minimum de pages : " + e1.min());
-	System.out.println("Nombre minimum de pages : " + e1.avg());
+	System.out.println("Nombre moyen de pages : " + e1.avg());
 	e1.sort();
 	System.out.println("Tableau dans l'ordre : ");
 	e1.showTab();
@@ -33,6 +26,13 @@ public class Main {
 	e.ajouterLivre(l1);
 	e.ajouterLivre(l2);
 	e.afficherLivres();
-	
+	//Partie2
+
+         System.out.println("\n BibliothequeTest");
+         BibliothequeTest.main(new String[]{});
+         System.out.println("\n BibliothequeV2Test");
+         BibliothequeV2Test.main(new String[]{});
+         System.out.println("\n GroupeTest");
+         GroupeTest.main(new String[]{});
     }
 }

@@ -3,11 +3,8 @@ package tp2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
-/**
- *
- * @author William
- */
 public class Etagere {
     private int code;
     private String domaine;
@@ -25,7 +22,7 @@ public class Etagere {
 	this.code = c;
 	this.domaine = d;
 	this.capacite = cap;
-	this.livres = new Livre[]{};
+	this.livres = new Livre[capacite];
     }
     
     public Livre[] getLivres(){return livres;}
@@ -43,17 +40,22 @@ public class Etagere {
 	else{System.out.println("\nIl n'y a plus de place, il faut prendre une plus grosse étagère");}
     }
     
-    public void supprimerLivre(int x){
-	boolean ok = false;
-	for(int i = 0; i <= livres.length - 1 && ok; i++){
-	    if(livres[i] != null) {
-		livres[i] = null;
-		ok = !ok;
-	    }
-	}
-	if(ok){System.out.println("\nLe livre à l'index " + x + " a été supprimé !");}
-	else{System.out.println("\nIl n'y avait pas de livre à cet endroit");}
+    public void supprimerLivre(int code) {
+        boolean ok = false;
+        for (int i = 0; i < livres.length; i++) {
+            if (livres[i] != null && livres[i].getCode() == code) {
+                System.out.println("\nLe livre \"" + livres[i].getTitre() + "\" a été supprimé !");
+                livres[i] = null;
+                ok = true;
+                break;
+            }
+        }
+        if (!ok) {
+            System.out.println("\nAucun livre avec le code " + code + " trouvé.");
+        }
     }
+
+
     
     public int sommePages(){
 	int x = 0;
@@ -66,30 +68,35 @@ public class Etagere {
     }
     
     public String chercherLivreParTitre(String titre){
-	for(int i = 0; i <= livres.length - 1; i++){
-	    if(livres[i].getTitre() == titre) {
-		return "Le livre que vous avez demandé ("+ titre +") est le numéro " + livres[i].getCode();
-	    }
-	}
-	return "\nIl n'y avait pas de livre avec ce nom";
+        for(int i = 0; i < livres.length; i++){
+            if(livres[i] != null && livres[i].getTitre().equalsIgnoreCase(titre)) {
+                return "Le livre que vous avez demandé ("+ titre +") est le numéro " + livres[i].getCode();
+            }
+        }
+        return "\nIl n'y avait pas de livre avec ce nom";
     }
+
     
+
     public void chercherPetitsLivres(int seuil){
-	boolean ok = false;
-	System.out.println("Nombre de livres en dessous de " + seuil + " pages");
-	for(int i = 0; i <= livres.length - 1; i++){
-	    if(livres[i].getNbPages() <= seuil) {
-		livres[i].toString();
-		ok = true;
-	    }
-	}
-	if(ok == false){System.out.println("\nAucun livre trouvé en dessous de " + seuil + " pages");}
+        boolean ok = false;
+        System.out.println("Livres avec moins de " + seuil + " pages :");
+        for(int i = 0; i < livres.length; i++){
+            if(livres[i] != null && livres[i].getNbPages() < seuil) {
+                System.out.println(livres[i]);
+                ok = true;
+            }
+        }
+        if(ok== false){
+            System.out.println("Aucun livre trouvé en dessous de " + seuil + " pages");
+        }
     }
+
     
     public void afficherNouveauxLivres(int anneeActuelle){
 	boolean ok = false;
 	for(int i = 0; i <= livres.length - 1; i++){
-	    if(livres[i].getAnneeEdition() == anneeActuelle) {
+	    if(livres[i] != null && livres[i].getAnneeEdition() == anneeActuelle) {
 		System.out.println("[" + livres[i].getCode() + "] " + livres[i].getTitre());
 		ok = true;
 	    }
@@ -97,10 +104,18 @@ public class Etagere {
 	if(ok == false){System.out.println("\nAucun livre de " + anneeActuelle);}
     }
     
-    public void changerNbPages(int code, int nbPages){
-	if(livres[code] != null){
-	    livres[code].setNbPages(nbPages);
-	}
+    public void changerNbPages(int code, int nbPages) {
+        boolean ok= false;
+        for (int i = 0; i < livres.length; i++) {
+            if (livres[i] != null && livres[i].getCode() == code) {
+                livres[i].setNbPages(nbPages);
+                ok = true;
+                break;
+            }
+        }
+        if (ok==false) {
+            System.out.println("Livre avec code " + code + " non trouvé !");
+        }
     }
     
     public void afficherLivres(){
@@ -114,12 +129,28 @@ public class Etagere {
 	if(ok == false){System.out.println("\nAucun livre");}
     }
     
-    public void trier(){
-	//A faire
+    private int nbLivres() {
+        int count = 0;
+        for (Livre l : livres) {
+            if (l != null) count++;
+        }
+        return count;
     }
-    
-    public String[] chercherTitresParAuteur(String auteur){
-	//A faire
-	return null;
+
+    public void trier() {
+        Arrays.sort(livres, 0, nbLivres(), Comparator.comparingInt(Livre::getNbPages));
     }
+
+    public String[] chercherTitresParAuteur(String auteur) {
+        ArrayList<String> titres = new ArrayList<>();
+
+        for (Livre l : livres) {
+            if (l != null && l.getAuteur().equalsIgnoreCase(auteur)) {
+                titres.add(l.getTitre());
+            }
+        }
+
+        return titres.toArray(new String[0]);
+    }
+
 }
