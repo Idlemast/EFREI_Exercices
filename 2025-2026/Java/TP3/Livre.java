@@ -1,10 +1,6 @@
-
+package tp3;
 import java.util.Collections;
 
-/**
- *
- * @author William
- */
 public class Livre extends Article {
     private String ISBN;
     private int nbPages;
@@ -73,4 +69,9 @@ public class Livre extends Article {
 	}
 	return lengths;
     }
+    @Override
+    public String getNumero() {
+        return this.getISBN(); 
+    }
+
 }

@@ -1,11 +1,7 @@
+package tp3;
 
 import java.time.LocalDate;
 
-
-/**
- *
- * @author William
- */
 public class main {
 
     /**
@@ -36,6 +32,8 @@ public class main {
 	System.out.println(manuel5);
 	
 	//Test Magazine
+        Magazine magazine0= new Magazine("Pokemon - les aventures de pikachu ", 10.0, 1, "00000001",Magazine.Periodicite.M,
+        LocalDate.now().minusMonths(5));
 	Magazine magazine1 = new Magazine("Louis Vuitton - La mode made in France", "11111111");
 	Magazine magazine2 = new Magazine("Shein, le nouvel eldorado", "11111122");
 	Magazine magazine3 = new Magazine("Uniqlo, le style japonais", "11111123");
@@ -59,29 +57,36 @@ public class main {
 	//Test BonDepot
 	BonDepot bonDepot1 = new BonDepot("+33 6 01 01 01 01");
 	BonDepot bonDepot2 = new BonDepot("+33 7 77 77 77 77");
-	System.out.println(bonDepot1);
-	System.out.println(bonDepot2);
-	bonDepot1.addLigne(ligneDepot2);
-	System.out.println(bonDepot1);
-	bonDepot1.addLigne(ligneDepot3);
-	System.out.println(bonDepot1);
-	bonDepot1.addLigne(ligneDepot6);
-	System.out.println(bonDepot1);
-	bonDepot1.addLigne(ligneDepot6);
+        
+        bonDepot1.ajouterLigne(ligneDepot2.getCodeArticle(), ligneDepot2.getNbExemplairesDepot());
+        System.out.println(bonDepot1);
+
+        bonDepot1.ajouterLigne(ligneDepot3.getCodeArticle(), ligneDepot3.getNbExemplairesDepot());
+        System.out.println(bonDepot1);
+
+        bonDepot1.ajouterLigne(ligneDepot6.getCodeArticle(), ligneDepot6.getNbExemplairesDepot());
+        System.out.println(bonDepot1);
+
+        bonDepot1.ajouterLigne(ligneDepot6.getCodeArticle(), ligneDepot6.getNbExemplairesDepot());
 	
 	//Test Etablissement
 	Etablissement etablissement1 = new Etablissement("BHV", 4, 10);
 	Etablissement etablissement2 = new Etablissement("Grande Epicerie de Paris", 4, 5);
 //	System.out.println(etablissement1);
 //	System.out.println(etablissement2);
-	etablissement1.addBonDepot(bonDepot1);
-//	System.out.println(etablissement1);
-	bonDepot2.addLigne(ligneDepot4);
-	bonDepot2.addLigne(ligneDepot5);
-	etablissement1.addBonDepot(bonDepot2);
-	etablissement1.addArticle(livre17);
-	etablissement1.addArticle(livre4);
-	System.out.println(etablissement1);
+
+        BonDepot bonE1 = etablissement1.ajouter("+33 6 01 01 01 01");
+        BonDepot bonE2 = etablissement1.ajouter("+33 7 77 77 77 77");
+
+
+        bonE1.ajouterLigne(ligneDepot4.getCodeArticle(), ligneDepot4.getNbExemplairesDepot());
+        bonE1.ajouterLigne(ligneDepot5.getCodeArticle(), ligneDepot5.getNbExemplairesDepot());
+
+
+        etablissement1.ajouterArticle(livre17);
+        etablissement1.ajouterArticle(livre4);
+
+        System.out.println(etablissement1);
 	
 	//Test getNumero()
 	System.out.println("Numero (Livre ou Manuel): " + livre1.getNumero());
@@ -99,14 +104,14 @@ public class main {
 	livre1.retirer(8);
 	
 	//Test calculerPrix
-	System.out.println("\nDate de publication du Magazine : 01/01/2020, Periodicite : " + magazine1.getPeriodicite().toString() + " et prix : " + magazine1.getPrixInitialVente());
+	System.out.println("\nDate de publication du Magazine : 01/01/2020, Periodicite : " + magazine0.getPeriodicite().toString() + " et prix : " + magazine0.getPrixInitialVente());
 	magazine1.setDateDePublication(LocalDate.parse("2020-01-01"));
-	System.out.println("Calcul du prix : " + magazine1.calculerPrix());
+	System.out.println("Calcul du prix : " + magazine0.calculerPrix());
 	
 	//Test ajout Livre depuis Etablissement
 	System.out.println("\n" + etablissement1);
 	System.out.println("\nNombre de places : " + etablissement1.getNbArticles() + "/" + etablissement1.getLimiteArticles());
-	etablissement1.addLivre("Harry Potter et l'Enfant Maudit", 25, 1, "1231591475684", 359);
+	etablissement1.ajouterLivre("Harry Potter et l'Enfant Maudit", 25, 1, "1231591475684", 359);
 	
 	
 	
@@ -125,9 +130,9 @@ public class main {
 //	LigneDepot ld4 = new LigneDepot(m1.getISBN(), 3);
 //	LigneDepot ld5 = new LigneDepot(m1.getISBN(), 10);
 //	
-//	bd1.addLigne(ld1);
+//	bd1.ajouterLigne(ld1);
 //	System.out.println(bd1);
-//	bd1.addLigne(ld2);
+//	bd1.ajouterLigne(ld2);
 //	System.out.println(bd1);
 //	System.out.println(bd2);
 //	
@@ -135,7 +140,7 @@ public class main {
 //	e1.addArticle(m1);
 //	System.out.println(e1);
 //	
-//	bd1.addLigne(ld5);
+//	bd1.ajouterLigne(ld5);
 //	System.out.println(bd1);
 	
     }

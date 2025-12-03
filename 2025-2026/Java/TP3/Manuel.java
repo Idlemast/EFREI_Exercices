@@ -1,12 +1,7 @@
+package tp3;
 
 import java.util.ArrayList;
 
-
-
-/**
- *
- * @author William
- */
 public class Manuel extends Article {
     private String ISBN;
     private int nbPages;
@@ -96,7 +91,7 @@ public class Manuel extends Article {
 	    + "%-" + lengths[1] + "s %-" + lengths[2] + "s %-" + lengths[3] + "s %-" + lengths[4] + "s %-" + lengths[5] + "s %-" + lengths[6] + "s %-" + lengths[7] + "s"
 	    + separator,
 	    Champs.DESC, Champs.PRIX_INITIAL, Champs.NB_EX, Champs.CODE, Champs.NB_PAGES, Champs.MATIERE, Champs.NIVEAU,
-	    getDescription(), super.getPrixInitialVente(), super.getNbExemplaires(), getISBN(), getNbPages(), matiere.toString, niveau.toString
+	    getDescription(), super.getPrixInitialVente(), super.getNbExemplaires(), getISBN(), getNbPages(), matiere.toString(), niveau.toString()
 	);
     }
     
@@ -114,9 +109,9 @@ public class Manuel extends Article {
 	//Nombre de pages
 	lengths[5] = Math.max(Champs.NB_PAGES.toString().length(), Integer.toString(getNbPages()).length()) + 1;
 	//Matiere
-	lengths[6] = Math.max(Champs.MATIERE.toString().length(), matiere.toString.length()) + 1;
+	lengths[6] = Math.max(Champs.MATIERE.toString().length(), matiere.toString().length()) + 1;
 	//Niveau
-	lengths[7] = Math.max(Champs.NIVEAU.toString().length(), niveau.toString.length()) + 1;
+	lengths[7] = Math.max(Champs.NIVEAU.toString().length(), niveau.toString().length()) + 1;
 	//Calcul du maximum entre les différentes propriétés pour le séparateur
 	lengths[0] = 0;
 	for (int l : lengths) {
@@ -124,4 +119,9 @@ public class Manuel extends Article {
 	}
 	return lengths;
     }
+    @Override
+    public String getNumero() {
+        return this.ISBN;
+    }
+
 }

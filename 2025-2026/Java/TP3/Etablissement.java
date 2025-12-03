@@ -1,10 +1,7 @@
-
+package tp3;
 import java.time.LocalDate;
 
-/**
- *
- * @author William
- */
+
 public class Etablissement {
     private String nom;
     int limiteArticles, limiteBons, nbArticles = 0, nbBons = 0;
@@ -51,100 +48,75 @@ public class Etablissement {
 	return String.format(str);
     }
     
-    //si l'article est déjà créé
-    public void addArticle(Article a){
-	//si y'a de la place
-	if(nbArticles + a.getNbExemplaires() <= limiteArticles){
-	    //!!!Il faut faire en sorte de gérer les trucs qu'on ajoute dans Etablisssement,
-	    //!!!je sais pas comment faire soit qte sur x ednroit du tableau mais du coup peut
-	    //!!!être vide où à chaque endroit on met 1 de qte comme ça c'est bon
-	    //!!!grosso modo c'est un peu différent de BonDepot
-	    for(int i = nbArticles; i <= nbArticles + a.getNbExemplaires(); i++){
-		articles[i] = a;
-	    }
-	    System.out.format(
-		"%nL'article \"%s\" a ete ajoute a l'etablissement %s%n%n",
-		a.getDescription(), nom
-	    );
-	    nbArticles += a.getNbExemplaires();
-	} else {
-	    System.out.format(
-		"%nPlus de place pour rajouter des articles dans l'établissement %s (max : %s)",
-		nom, limiteArticles
-	    );
-	}
+    
+    public void ajouterArticle(Article a){
+        if (nbArticles >= limiteArticles){
+            System.out.format(
+            "%nPlus de place pour rajouter des articles dans l'établissement %s (max : %s)",
+            nom, limiteArticles
+            );
+        return;
+        }
+        
+        int pos = 0;
+        while (pos < nbArticles && !articles[pos].placerApres(a))
+            pos++;
+
+        for (int i = nbArticles; i > pos; i--)
+            articles[i] = articles[i - 1];
+
+        articles[pos] = a;
+        nbArticles++;
+        }
+    
+    public BonDepot ajouter(String numeroTelephone){
+        if (nbBons >= limiteBons){
+            System.out.printf("Plus de place pour ajouter un bon de depot dans %s%n", nom);
+            return null;
+        }
+
+        BonDepot b = new BonDepot(numeroTelephone);
+
+        int pos = 0;
+        while (pos < nbBons && bons[pos].getDateEmission().isBefore(b.getDateEmission()))
+            pos++;
+
+        for (int i = nbBons; i > pos; i--)
+            bons[i] = bons[i - 1];
+
+        bons[pos] = b;
+        nbBons++;
+
+        return b;
+    }
+
+    
+    public void ajouterLivre(String description, double prixInitialDeVente, int nbExemplaires, String ISBN, int nbPages){
+        ajouterArticle(new Livre(description, prixInitialDeVente, nbExemplaires, ISBN, nbPages));
+    }
+
+    
+    public void ajouterManuel(String description, double prixInitialDeVente, int nbExemplaires, String ISBN, int nbPages, Manuel.Matiere matiere, Manuel.Niveau niveau){
+        ajouterArticle(new Manuel(description, prixInitialDeVente, nbExemplaires, ISBN, nbPages, matiere, niveau));
     }
     
-    public void addBonDepot(BonDepot b){
-	if(nbBons <= limiteBons){
-	    bons[nbBons] = b;
-	    System.out.format(
-		"Le bon de depot \"%s\" a ete ajoute a l'etablissement %s%n%n",
-		b.getId(), nom
-	    );
-	    ++nbBons;
-	} else {
-	    System.out.format(
-		"Plus de place pour rajouter des bons de depot dans l'etablissement %s (max : %s)%n%n",
-		nom, limiteBons
-	    );
-	}
+    public void ajouterMagazine(String description, double prixInitialDeVente, int nbExemplaires, String ISSN, Magazine.Periodicite periodicite, LocalDate datePublication){
+        ajouterArticle(new Magazine(description, prixInitialDeVente, nbExemplaires, ISSN, periodicite, datePublication));
     }
     
-    //!!! A changer comme dit plus haut
-    public void addLivre(String description, double prixInitialDeVente, int nbExemplaires, String ISBN, int nbPages){
-	//si y'a de la place
-	if(nbArticles + nbExemplaires <= limiteArticles){
-	    Livre x = new Livre(description, prixInitialDeVente, nbExemplaires, ISBN, nbPages);
-	    articles[nbArticles] = x;
-	    System.out.format(
-		"Le livre \"%s\" a ete ajoute a l'etablissement %s%n%n",
-		x.getDescription(), nom
-	    );
-	    ++nbArticles;
-	} else {
-	    System.out.format(
-		"Plus de place pour rajouter le livre dans l'établissement %s (max : %s)",
-		nom, limiteArticles
-	    );
-	}
+    public Article rechercher(String numero){
+    for (int i = 0; i < nbArticles; i++){
+        if (articles[i].getNumero().equals(numero))
+            return articles[i];
     }
-    
-    //!!! A changer comme dit plus haut
-    public void addManuel(String description, double prixInitialDeVente, int nbExemplaires, String ISBN, int nbPages, Manuel.Matiere matiere, Manuel.Niveau niveau){
-	//si y'a de la place
-	if(articles.length <= limiteArticles){
-	    Manuel x = new Manuel(description, prixInitialDeVente, nbExemplaires, ISBN, nbPages, matiere, niveau);
-	    articles[nbArticles] = x;
-	    System.out.format(
-		"Le manuel \"%s\" a ete ajoute a l'etablissement %s%n%n",
-		x.getDescription(), nom
-	    );
-	    ++nbArticles;
-	} else {
-	    System.out.format(
-		"Plus de place pour rajouter le manuel dans l'établissement %s (max : %s)",
-		nom, limiteArticles
-	    );
-	}
+    return null;
     }
-    
-    //!!! A changer comme dit plus haut
-    public void addMagazine(String description, double prixInitialDeVente, int nbExemplaires, String ISSN, Magazine.Periodicite periodicite, LocalDate datePublication){
-	//si y'a de la place
-	if(articles.length <= limiteArticles){
-	    Magazine x = new Magazine(description, prixInitialDeVente, nbExemplaires, ISSN, periodicite, datePublication);
-	    articles[nbArticles] = x;
-	    System.out.format(
-		"Le magazine \"%s\" a ete ajoute a l'etablissement %s%n%n",
-		x.getDescription(), nom
-	    );
-	    ++nbArticles;
-	} else {
-	    System.out.format(
-		"Plus de place pour rajouter le magazine dans l'établissement %s (max : %s)",
-		nom, limiteArticles
-	    );
-	}
+    public void ajouter(String numero, int qte){
+    Article a = rechercher(numero);
+    if (a != null) a.ajouter(qte);
+    }
+    public void retirer(String numero, int qte){
+    Article a = rechercher(numero);
+    if (a != null) a.retirer(qte);
     }
 }

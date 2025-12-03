@@ -1,10 +1,6 @@
-
+package tp3;
 import java.time.LocalDate;
 
-/**
- *
- * @author William
- */
 public abstract class Article {
     private String description;
     private double prixInitialVente;
@@ -41,16 +37,9 @@ public abstract class Article {
 //	return x;
 //    }
     
-    //Selon l'enfant, on renvoie la bonne méthode
-    public String getNumero(){
-	if(this instanceof Magazine){
-	    return ((Magazine) this).getISSN();
-	} else if(this instanceof Livre){
-	    return ((Livre) this).getISBN();
-	} else {
-	    return ((Manuel) this).getISBN();
-	}
-    }
+    // Chaque sous-classe doit renvoyer son propre numéro (ISBN ou ISSN)
+    public abstract String getNumero();
+
     
     public boolean placerApres(Article a){ return this.getNumero().compareTo(a.getNumero()) > 0;}
     
@@ -69,6 +58,7 @@ public abstract class Article {
     
     public double calculerPrix(){
 	LocalDate now = LocalDate.now();
+        double prix = this.prixInitialVente;
 	if(this instanceof Magazine){
 	    Magazine m = (Magazine) this;
 	    if(
@@ -77,20 +67,20 @@ public abstract class Article {
 		(m.getPeriodicite() == Magazine.Periodicite.M && m.getDateDePublication().plusMonths(4).isBefore(now)) ||
 		(m.getPeriodicite() == Magazine.Periodicite.T && m.getDateDePublication().plusYears(1).isBefore(now))
 	    ){
-		this.prixInitialVente *= 0.25;
+		prix *= 0.25;
 	    } else if(
 		//puis les -50%
 		(m.getPeriodicite() == Magazine.Periodicite.H && m.getDateDePublication().plusWeeks(2).isBefore(now)) ||
 		(m.getPeriodicite() == Magazine.Periodicite.M && m.getDateDePublication().plusMonths(2).isBefore(now)) ||
 		(m.getPeriodicite() == Magazine.Periodicite.T && m.getDateDePublication().plusMonths(6).isBefore(now))
 	    ){
-		this.prixInitialVente /= 2;
+		prix /= 2;
 	    }
 	} else {
 	    //4 = avril
-	    if(now.getMonthValue() == 4) this.prixInitialVente /= 2;
+	    if(now.getMonthValue() == 4) prix /= 2;
 	}
-	return this.prixInitialVente;
+	return prix;
     }
     
     @Override

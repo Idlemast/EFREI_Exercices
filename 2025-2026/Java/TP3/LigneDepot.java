@@ -1,7 +1,5 @@
-/**
- *
- * @author William
- */
+package tp3;
+
 public class LigneDepot {
     private String codeArticle;
     private int nbExemplairesDepot;

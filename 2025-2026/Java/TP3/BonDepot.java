@@ -1,9 +1,6 @@
+package tp3;
 import java.time.LocalDate;
 
-/**
- *
- * @author William
- */
 public class BonDepot {
     private int id;
     private String numeroTelephone;
@@ -31,6 +28,8 @@ public class BonDepot {
     public BonDepot(String numeroTelephone, LocalDate dateEmission, int limite){
 	this(numeroTelephone, dateEmission);
 	this.limite = limite;
+        this.lignes = new LigneDepot[limite]; 
+        this.nbLigneDepot = 0; 
     }
     
     public int getId(){ return id; }
@@ -41,21 +40,22 @@ public class BonDepot {
     public void setNumeroTelephone(String x){ numeroTelephone = x; }
     public void setDateEmission(LocalDate x){ dateEmission = x; }
     
-    public void addLigne(LigneDepot ligne){
-	if(nbLigneDepot + ligne.getNbExemplairesDepot() <= limite){
-	    lignes[nbLigneDepot] = ligne;
-	    System.out.format(
-		"L'article \"%s\" a ete ajoute au bon de depot %s%n%n",
-		ligne.getCodeArticle(), id
-	    );
-	    nbLigneDepot += ligne.getNbExemplairesDepot();
-	} else {
-	    System.out.format(
-		"Impossible d'ajouter %s article(s) pour le bon de depot %s (%s/%s)%n%n",
-		ligne.getNbExemplairesDepot(), id, nbLigneDepot, limite
-	    );
-	}
+    public void ajouterLigne(String codeArticle, int nbEx){
+        if (nbLigneDepot < limite) {   
+            lignes[nbLigneDepot] = new LigneDepot(codeArticle, nbEx);
+            System.out.format(
+                "L'article \"%s\" a ete ajoute au bon de depot %s%n%n",
+                lignes[nbLigneDepot].getCodeArticle(), id
+            );
+            nbLigneDepot++;           
+        } else {
+            System.out.format(
+                "Impossible d'ajouter une nouvelle ligne : limite de %s lignes atteinte pour le bon %s%n%n",
+                limite, id
+            );
+        }
     }
+
     
     @Override
     public String toString(){

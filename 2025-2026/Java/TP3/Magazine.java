@@ -1,10 +1,7 @@
-
+package tp3;
 import java.time.LocalDate;
 
-/**
- *
- * @author William
- */
+
 public class Magazine extends Article {
     private String ISSN;
     private Periodicite periodicite;
@@ -12,13 +9,19 @@ public class Magazine extends Article {
         H("Hebdomadaire"),
         M("Mensuel"),
         T("Trimestriel");
-        
-        private final String toString;
 
-	Periodicite(String x) {
-	    this.toString = x;
-	}
+        private final String label;
+
+        Periodicite(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
     }
+
     private LocalDate dateDePublication;
     public static enum Champs {
 	DESC("Description"), PRIX_INITIAL("Prix initial de vente"),
@@ -33,25 +36,20 @@ public class Magazine extends Article {
     }
     
     public Magazine(String description, double prixInitialDeVente, int nbExemplaires, String ISSN, Periodicite periodicite, LocalDate dateDePublication){
-	super(description);
+	super(description, prixInitialDeVente, nbExemplaires);
 	this.ISSN = ISSN;
 	this.periodicite = periodicite;
 	this.dateDePublication = dateDePublication;
     }
-    
-    public Magazine(String description, String ISSN, Periodicite periodicite, LocalDate dateDePublication){
-	super(description);
-	this.ISSN = ISSN;
-	this.periodicite = periodicite;
-	this.dateDePublication = dateDePublication;
+    // BONUS ! 
+    public Magazine(String description, String ISSN) {
+    super(description);             
+    this.ISSN = ISSN;
+    this.periodicite = Periodicite.H;     
+    this.dateDePublication = LocalDate.now();  
     }
-    
-    public Magazine(String description, String ISSN){
-	super(description);
-	this.ISSN = ISSN;
-	this.periodicite = Periodicite.H;
-	this.dateDePublication = LocalDate.now();
-    }
+
+
     
     public String getISSN(){ return ISSN; }
     public Periodicite getPeriodicite(){ return periodicite; }
@@ -71,7 +69,7 @@ public class Magazine extends Article {
 	    + "%-" + lengths[1] + "s %-" + lengths[2] + "s %-" + lengths[3] + "s %-" + lengths[4] + "s %-" + lengths[5] + "s %-" + lengths[6] + "s"
 	    + separator,
 	    Champs.DESC, Champs.PRIX_INITIAL, Champs.NB_EX, Champs.CODE, Champs.PERIODICITE, Champs.DATE_PUBLICATION,
-	    getDescription(), super.getPrixInitialVente(), super.getNbExemplaires(), ISSN, periodicite.toString, dateDePublication.toString()
+	    getDescription(), super.getPrixInitialVente(), super.getNbExemplaires(), ISSN, periodicite.toString(), dateDePublication.toString()
 	);
     }
     
@@ -87,7 +85,7 @@ public class Magazine extends Article {
 	//ISBN
 	lengths[4] = Math.max(Champs.CODE.toString().length(), getISSN().length())+ 1;
 	//Périodicité
-	lengths[5] = Math.max(Champs.PERIODICITE.toString().length(), periodicite.toString.length()) + 1;
+	lengths[5] = Math.max(Champs.PERIODICITE.toString().length(), periodicite.toString().length()) + 1;
 	//Date de publication
 	lengths[6] = Math.max(Champs.DATE_PUBLICATION.toString().length(), dateDePublication.toString().length()) + 1;
 	//Calcul du maximum entre les différentes propriétés pour le séparateur
@@ -97,4 +95,9 @@ public class Magazine extends Article {
 	}
 	return lengths;
     }
+    @Override
+    public String getNumero() {
+        return this.ISSN;
+    }
+
 }
