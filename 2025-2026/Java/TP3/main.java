@@ -2,7 +2,7 @@ package tp3;
 
 import java.time.LocalDate;
 
-public class main {
+public class Main {
 
     /**
      * @param args the command line arguments
@@ -69,6 +69,17 @@ public class main {
 
         bonDepot1.ajouterLigne(ligneDepot6.getCodeArticle(), ligneDepot6.getNbExemplairesDepot());
 	
+        // Test du dépassement de la limite du bon de dépot 1 (9 lignes max) 
+        bonDepot1.ajouterLigne(ligneDepot1.getCodeArticle(), ligneDepot1.getNbExemplairesDepot()); // 5e ligne
+        bonDepot1.ajouterLigne(ligneDepot4.getCodeArticle(), ligneDepot4.getNbExemplairesDepot()); // 6e ligne
+        bonDepot1.ajouterLigne(ligneDepot5.getCodeArticle(), ligneDepot5.getNbExemplairesDepot()); // 7e ligne
+        bonDepot1.ajouterLigne("101020102010", 1); // 8e ligne
+        bonDepot1.ajouterLigne("1020130230101", 1); // 9e ligne
+        bonDepot1.ajouterLigne("0312031023013", 1); // 10e ligne : en théorie, ça doit être refusé
+
+        System.out.println("\nBonDepot1 après tentative d'ajouter 10 lignes :");
+        System.out.println(bonDepot1);
+        
 	//Test Etablissement
 	Etablissement etablissement1 = new Etablissement("BHV", 4, 10);
 	Etablissement etablissement2 = new Etablissement("Grande Epicerie de Paris", 4, 5);
@@ -106,14 +117,48 @@ public class main {
 	//Test calculerPrix
 	System.out.println("\nDate de publication du Magazine : 01/01/2020, Periodicite : " + magazine0.getPeriodicite().toString() + " et prix : " + magazine0.getPrixInitialVente());
 	magazine1.setDateDePublication(LocalDate.parse("2020-01-01"));
-	System.out.println("Calcul du prix : " + magazine0.calculerPrix());
-	
+	System.out.println("Prix magazine -75% attendu : " + magazine0.calculerPrix());
+       
+        Magazine magRecent = new Magazine(
+            "Hebdo frais", 4.0, 10,
+            "22222222", Magazine.Periodicite.H,
+            LocalDate.now() 
+        );
+        System.out.println("prix initial de magRecent " + magRecent.getPrixInitialVente());
+        
+        System.out.println("Prix magazine récent (sans réduction) : " + magRecent.calculerPrix());
+
+        Magazine mag50 = new Magazine(
+            "Mensuel -50%", 10.0, 5,
+            "33333333", Magazine.Periodicite.M,
+            LocalDate.now().minusMonths(3)
+        );
+        System.out.println("prix initial de mag50 " + mag50.getPrixInitialVente());
+        System.out.println("Prix magazine -50% attendu : " + mag50.calculerPrix());
+        
 	//Test ajout Livre depuis Etablissement
 	System.out.println("\n" + etablissement1);
 	System.out.println("\nNombre de places : " + etablissement1.getNbArticles() + "/" + etablissement1.getLimiteArticles());
 	etablissement1.ajouterLivre("Harry Potter et l'Enfant Maudit", 25, 1, "1231591475684", 359);
 	
 	
+        etablissement1.ajouterManuel("Manuel de Statistiques CP", 2.2, 30, "010000001", 291, Manuel.Matiere.MATHS, Manuel.Niveau.CP
+        );
+        
+        Article manuelStats = etablissement1.rechercher("010000001");
+        System.out.println("\nManuel ajouté :");
+        System.out.println(manuelStats);
+        
+        Article rien = etablissement1.rechercher("00000000000001919919919");
+        System.out.println("Recherche d'un article qui n'existe pas : " + rien);
+        
+        System.out.println("\nAvant ajout via Etablissement : " + livre17.getNbExemplaires());
+        etablissement1.ajouter(livre17.getISBN(), 1000);
+        System.out.println("Après ajout via Etablissement (+1000) : " + livre17.getNbExemplaires());
+        etablissement1.retirer(livre17.getISBN(), 2);
+        System.out.println("Après retrait via Etablissement (-2) : " + livre17.getNbExemplaires());
+        
+        
 	
 //	Manuel m1 = new Manuel("Le bitcoin pour les nuls", 1111111112, 350, Manuel.Matiere.INFO, Manuel.Niveau.CE1);
 //	System.out.println(m1);
