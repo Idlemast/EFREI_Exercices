@@ -1,10 +1,10 @@
 package tp3;
-import java.time.LocalDate;
 
 public abstract class Article {
-    private String description;
-    private double prixInitialVente;
-    private int nbExemplaires;
+    //On met les valeurs par défaut
+    private String description = "Article Test";
+    private double prixInitialVente = 9.9;
+    private int nbExemplaires = 1;
     
     public Article(String description, double prixInitialVente, int nbExemplaires){
 	this.description = description;
@@ -12,13 +12,16 @@ public abstract class Article {
 	this.nbExemplaires = nbExemplaires;
     }
     
-    public Article(String description){
-	this(description, 9.90, 1);
+    public Article(String description, double prixInitialVente){
+	this.description = description;
+	this.prixInitialVente = Math.round(prixInitialVente * 100.0) / 100.0;
     }
     
-    public Article(){
-	this("", 9.90, 1);
+    public Article(String description){
+	this.description = description;
     }
+    
+    public Article(){}
     
     public String getDescription(){ return description; }
     public double getPrixInitialVente(){ return prixInitialVente; }
@@ -28,67 +31,24 @@ public abstract class Article {
     public void setPrixInitialVente(double x){ prixInitialVente = x; }
     public void setNbExemplaires(int x){ nbExemplaires = x; }
     
-//    public int[] printArticleLengths(int[] x){
-//	switch(x.length){
-//	    //6 = livre // 3m, 4m
-//	    //8 = manuel // 3m, 4m, 5, 6
-//	    //7 = magazine // 3, 4, 5
-//	}
-//	return x;
-//    }
-    
     // Chaque sous-classe doit renvoyer son propre numéro (ISBN ou ISSN)
     public abstract String getNumero();
 
-    
     public boolean placerApres(Article a){ return this.getNumero().compareTo(a.getNumero()) > 0;}
     
-    public void ajouter(int x){
+    public boolean ajouter(int x){
 	this.nbExemplaires += x;
+	return true;
     }
     
     //Utilisation de ajouter étant donné que c'est factuellement pareil, juste en inversé
-    public void retirer(int x){
+    public boolean retirer(int x){
 	if(x <= this.nbExemplaires){
 	    this.ajouter(-x);
-	} else {
-	    System.out.println("Vous ne pouvez pas retirer " + x + " a " + this.nbExemplaires + " exemplaires");
-	}
+	    return true;
+	} else { return false; }
     }
     
-    public double calculerPrix(){
-	LocalDate now = LocalDate.now();
-        double prix = this.prixInitialVente;
-	if(this instanceof Magazine){
-	    Magazine m = (Magazine) this;
-	    if(
-		//on calcul d'abord les -75%
-		(m.getPeriodicite() == Magazine.Periodicite.H && m.getDateDePublication().plusWeeks(4).isBefore(now)) ||
-		(m.getPeriodicite() == Magazine.Periodicite.M && m.getDateDePublication().plusMonths(4).isBefore(now)) ||
-		(m.getPeriodicite() == Magazine.Periodicite.T && m.getDateDePublication().plusYears(1).isBefore(now))
-	    ){
-		prix *= 0.25;
-	    } else if(
-		//puis les -50%
-		(m.getPeriodicite() == Magazine.Periodicite.H && m.getDateDePublication().plusWeeks(2).isBefore(now)) ||
-		(m.getPeriodicite() == Magazine.Periodicite.M && m.getDateDePublication().plusMonths(2).isBefore(now)) ||
-		(m.getPeriodicite() == Magazine.Periodicite.T && m.getDateDePublication().plusMonths(6).isBefore(now))
-	    ){
-		prix /= 2;
-	    }
-	} else {
-	    //4 = avril
-	    if(now.getMonthValue() == 4) prix /= 2;
-	}
-	return prix;
-    }
-    
-    @Override
-    public String toString(){
-	String str = "";
-	if(this instanceof Livre){ str += ((Livre) this).toString(); }
-	else if(this instanceof Manuel){ str += ((Manuel) this).toString(); }
-	else str += ((Magazine) this).toString();
-	return str;
-    }
+    //Définition d'une méthode abstraite pour que les cas soient gérées dans les classes concernées
+    public abstract double calculerPrix();
 }
